@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "GetName";
+}
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<style>
+    input[type="text"], select {
+        width: 250px;
+    }
+
+    a:link, a:active, a:visited, a:hover {
+        text-decoration: none;
+        color: black;
+    }
+    /*--- DROPDOWN ---*/
+    #nav ul {
+        list-style: none;
+        position: absolute;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+    }
+</style>
+
+<script type="text/javascript">
+    var textbox;
+    var selectValue;
+
+    $(function () {
+        textbox = $("#txtCountrty");
+        selectValue = $('ul#selectedValue');
+
+        textbox.on("input", function () {
+            getAutoComplete(textbox.val());
+        });
+    });
+    function getAutoComplete(Name) {
+        var uri = "Home/GetName";
+        $.getJSON(uri, { Name: Name })
+       .done(function (data) {
+           selectValue.html("");
+           var count = 0;
+           $.each(data, function (key, item) {
+               //$('<option>').text(item).appendTo('#selectedValue');
+               var li = $('<li/>').addClass('ui-menu-item').attr('role', 'menuitem').html("<a href='#' onclick=\"setText('" + item + "')\">" + item + "</a>").appendTo(selectValue);
+               count++;
+           });
+       });
+    }
+    function setText(text) {
+        textbox.val(text);
+        getAutoComplete(text);
+    }
+
+</script>
+
+<h2>MVC AutoComplete Sample</h2>
+<div id="nav">
+    <input type="text" id="txtCountrty" />
+    <ul id="selectedValue"></ul>
+</div>
